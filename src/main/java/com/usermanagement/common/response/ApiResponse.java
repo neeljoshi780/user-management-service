@@ -13,52 +13,19 @@ import java.time.LocalDateTime;
  * @param <T> type of response data
  */
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ApiResponse<T> {
 
-	private boolean success;
+	private final boolean success;
 
-	private String message;
+	private final int status;
 
-	private T data;
+	private final String message;
 
-	private ErrorResponseDto error;
+	private final T data;
 
-	private LocalDateTime timestamp;
+	private final ErrorResponseDto error;
 
-	/**
-	 * Builds a success response.
-	 *
-	 * @param data actual response data
-	 * @param message success message
-	 * @return ApiResponse object with success=true
-	 */
-	public static <T> ApiResponse<T> success(T data, String message) {
-		return ApiResponse.<T>builder()
-			.success(true)
-			.message(message)
-			.data(data)
-			.timestamp(LocalDateTime.now())
-			.build();
-	}
-
-	/**
-	 * Builds an error response.
-	 *
-	 * @param message error message
-	 * @param error error details
-	 * @return ApiResponse object with success=false
-	 */
-	public static <T> ApiResponse<T> error(String message, ErrorResponseDto error) {
-		return ApiResponse.<T>builder()
-			.success(false)
-			.message(message)
-			.error(error)
-			.timestamp(LocalDateTime.now())
-			.build();
-	}
+	private final LocalDateTime timestamp;
 
 }

@@ -1,6 +1,7 @@
 package com.usermanagement.common.util;
 
 import com.usermanagement.common.constants.PaginationConstants;
+import com.usermanagement.common.request.UserSearchRequestDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,25 +17,22 @@ public final class PaginationUtil {
 	/**
 	 * Builds pageable configuration with safe defaults.
 	 *
-	 * @param pageNumber   page number (0-based)
-	 * @param pageSize page size
-	 * @param sortBy   sorting field
-	 * @param sortDir  sorting direction (asc/desc)
+	 * @param requestDto  pagination and sorting request
 	 * @return pageable object
 	 */
-	public static Pageable buildPageable(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-		int page = (pageNumber == null || pageNumber < 0)
+	public static Pageable buildPageable(UserSearchRequestDto requestDto) {
+		int page = (requestDto.getPageNumber() == null || requestDto.getPageNumber() < 0)
 			? PaginationConstants.DEFAULT_PAGE
-			: pageNumber;
-		int size = (pageSize == null || pageSize <= 0)
+			: requestDto.getPageNumber();
+		int size = (requestDto.getPageSize() == null || requestDto.getPageSize() <= 0)
 			? PaginationConstants.DEFAULT_SIZE
-			: Math.min(pageSize, PaginationConstants.MAX_PAGE_SIZE);
-		String sortField = (sortBy == null || sortBy.isBlank())
+			: Math.min(requestDto.getPageSize(), PaginationConstants.MAX_PAGE_SIZE);
+		String sortField = (requestDto.getSortBy() == null || requestDto.getSortBy().isBlank())
 			? PaginationConstants.DEFAULT_SORT_BY
-			: sortBy;
-		String direction = (sortDir == null || sortDir.isBlank())
+			: requestDto.getSortBy();
+		String direction = (requestDto.getSortDir() == null || requestDto.getSortDir().isBlank())
 			? PaginationConstants.DEFAULT_SORT_DIR
-			: sortDir;
+			: requestDto.getSortDir();
 		Sort sort = direction.equalsIgnoreCase("desc")
 			? Sort.by(sortField).descending()
 			: Sort.by(sortField).ascending();

@@ -12,15 +12,8 @@ import java.util.Map;
  * Provides structured error details for client applications.
  */
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class ErrorResponseDto {
-
-	private LocalDateTime timestamp;
-
-	private int status;
 
 	private String error;
 

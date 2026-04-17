@@ -5,6 +5,7 @@ import com.usermanagement.common.constants.MessageConstants;
 import com.usermanagement.common.request.UserSearchRequestDto;
 import com.usermanagement.common.response.ApiResponse;
 import com.usermanagement.common.response.PageResponseDto;
+import com.usermanagement.common.util.ApiResponseBuilder;
 import com.usermanagement.dto.request.CreateUserRequestDto;
 import com.usermanagement.dto.request.UpdateUserRequestDto;
 import com.usermanagement.dto.response.UserResponseDto;
@@ -35,7 +36,7 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<UserResponseDto>> createUser(@Valid @RequestBody CreateUserRequestDto request) {
 		UserResponseDto response = userService.createUser(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, MessageConstants.USER_CREATED));
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseBuilder.success(HttpStatus.CREATED.value(), MessageConstants.USER_CREATED, response));
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class UserController {
 	@GetMapping(ApiPaths.ID)
 	public ResponseEntity<ApiResponse<UserResponseDto>> getUserById(@PathVariable Long id) {
 		UserResponseDto response = userService.getUserById(id);
-		return ResponseEntity.ok(ApiResponse.success(response, MessageConstants.USER_FETCHED));
+		return ResponseEntity.ok(ApiResponseBuilder.success(HttpStatus.OK.value(), MessageConstants.USER_FETCHED, response));
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<ApiResponse<PageResponseDto<UserResponseDto>>> getUsers(@ModelAttribute UserSearchRequestDto request) {
 		PageResponseDto<UserResponseDto> response = userService.getUsers(request);
-		return ResponseEntity.ok(ApiResponse.success(response, MessageConstants.USERS_FETCHED));
+		return ResponseEntity.ok(ApiResponseBuilder.success(HttpStatus.OK.value(), MessageConstants.USERS_FETCHED, response));
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class UserController {
 	@PutMapping("/{id}")
 	public ResponseEntity<ApiResponse<UserResponseDto>> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDto request) {
 		UserResponseDto response = userService.updateUser(id, request);
-		return ResponseEntity.ok(ApiResponse.success(response, MessageConstants.USER_UPDATED));
+		return ResponseEntity.ok(ApiResponseBuilder.success(HttpStatus.OK.value(), MessageConstants.USER_UPDATED, response));
 	}
 
 	/**
@@ -82,9 +83,9 @@ public class UserController {
 	 * @return success response with no data
 	 */
 	@DeleteMapping(ApiPaths.ID)
-	public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 		userService.deleteUser(id);
-		return ResponseEntity.ok(ApiResponse.success(null, MessageConstants.USER_DELETED));
+		return ResponseEntity.noContent().build();
 	}
 
 }

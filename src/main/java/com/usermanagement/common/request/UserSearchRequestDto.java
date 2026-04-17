@@ -19,7 +19,7 @@ public class UserSearchRequestDto {
 	private String sortBy;
 	private String sortDir;
 
-	// filters
+	// search
 	private String search;
 
 }

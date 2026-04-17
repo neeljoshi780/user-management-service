@@ -3,6 +3,7 @@ package com.usermanagement.common.exception;
 import com.usermanagement.common.constants.MessageConstants;
 import com.usermanagement.common.response.ApiResponse;
 import com.usermanagement.common.response.ErrorResponseDto;
+import com.usermanagement.common.util.ApiResponseBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,16 +24,14 @@ public class GlobalExceptionHandler {
 	/**
 	 * Common method to build error response.
 	 */
-	private ResponseEntity<ApiResponse<Object>> buildErrorResponse(String message, HttpStatus status, HttpServletRequest request, Map<String, String> fieldErrors) {
+	private ResponseEntity<ApiResponse<Object>> buildErrorResponse(HttpStatus status, HttpServletRequest request, String message, Map<String, String> fieldErrors) {
 		ErrorResponseDto error = ErrorResponseDto.builder()
-			.timestamp(LocalDateTime.now())
-			.status(status.value())
 			.error(status.name())
 			.message(message)
 			.path(request.getRequestURI())
 			.fieldErrors(fieldErrors)
 			.build();
-		return ResponseEntity.status(status).body(ApiResponse.error(message, error));
+		return ResponseEntity.status(status).body(ApiResponseBuilder.error(status.value(), message, error));
 	}
 
 	/**
@@ -44,7 +42,7 @@ public class GlobalExceptionHandler {
 		Map<String, String> fieldErrors = new HashMap<>();
 		ex.getBindingResult().getFieldErrors()
 			.forEach(error -> fieldErrors.put(error.getField(), error.getDefaultMessage()));
-		return buildErrorResponse(MessageConstants.VALIDATION_FAILED, HttpStatus.BAD_REQUEST, request, fieldErrors);
+		return buildErrorResponse(HttpStatus.BAD_REQUEST, request, MessageConstants.VALIDATION_FAILED, fieldErrors);
 	}
 
 	/**
@@ -57,7 +55,7 @@ public class GlobalExceptionHandler {
 			fieldErrors = new HashMap<>();
 			fieldErrors.put(ex.getFieldName(), ex.getMessage());
 		}
-		return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT, request, fieldErrors);
+		return buildErrorResponse(HttpStatus.CONFLICT, request, ex.getMessage(), fieldErrors);
 	}
 
 	/**
@@ -65,7 +63,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ApiResponse<Object>> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
-		return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND, request, null);
+		return buildErrorResponse(HttpStatus.NOT_FOUND, request, ex.getMessage(), null);
 	}
 
 	/**
@@ -73,7 +71,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<ApiResponse<Object>> handleBadRequest(BadRequestException ex, HttpServletRequest request) {
-		return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request, null);
+		return buildErrorResponse(HttpStatus.BAD_REQUEST, request, ex.getMessage(), null);
 	}
 
 	/**
@@ -81,7 +79,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<ApiResponse<Object>> handleBusiness(BusinessException ex, HttpServletRequest request) {
-		return buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT, request, null);
+		return buildErrorResponse(HttpStatus.CONFLICT, request, ex.getMessage(),null);
 	}
 
 	/**
@@ -89,7 +87,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<Object>> handleGlobal(Exception ex, HttpServletRequest request) {
-		return buildErrorResponse(MessageConstants.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, request, null);
+		return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request, MessageConstants.INTERNAL_SERVER_ERROR,null);
 	}
 
 }

@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public PageResponseDto<UserResponseDto> getUsers(UserSearchRequestDto request) {
-		Pageable pageable = PaginationUtil.buildPageable(request.getPageNumber(), request.getPageSize(), request.getSortBy(), request.getSortDir());
+		Pageable pageable = PaginationUtil.buildPageable(request);
 		Page<User> userPage = userRepository.findAll(UserSpecification.globalSearch(request.getSearch()), pageable);
 		List<UserResponseDto> content = userPage.getContent()
 			.stream()
