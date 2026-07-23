@@ -3,7 +3,7 @@ package com.usermanagement.service.impl;
 import com.usermanagement.common.constants.MessageConstants;
 import com.usermanagement.common.exception.DuplicateResourceException;
 import com.usermanagement.common.exception.ResourceNotFoundException;
-import com.usermanagement.common.request.UserSearchRequestDto;
+import com.usermanagement.common.request.FilterRequest;
 import com.usermanagement.common.response.PageResponseDto;
 import com.usermanagement.common.util.PaginationUtil;
 import com.usermanagement.dto.request.CreateUserRequestDto;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public PageResponseDto<UserResponseDto> getUsers(UserSearchRequestDto request) {
+	public PageResponseDto<UserResponseDto> getUsers(FilterRequest request) {
 		Pageable pageable = PaginationUtil.buildPageable(request);
 		Page<User> userPage = userRepository.findAll(UserSpecification.globalSearch(request.getSearch()), pageable);
 		List<UserResponseDto> content = userPage.getContent()

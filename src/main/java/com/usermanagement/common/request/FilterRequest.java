@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserSearchRequestDto {
+public class FilterRequest {
 
 	// pagination
 	private Integer pageNumber;

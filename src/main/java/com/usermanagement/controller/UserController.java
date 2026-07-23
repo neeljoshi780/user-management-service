@@ -2,7 +2,7 @@ package com.usermanagement.controller;
 
 import com.usermanagement.common.constants.ApiPaths;
 import com.usermanagement.common.constants.MessageConstants;
-import com.usermanagement.common.request.UserSearchRequestDto;
+import com.usermanagement.common.request.FilterRequest;
 import com.usermanagement.common.response.ApiResponse;
 import com.usermanagement.common.response.PageResponseDto;
 import com.usermanagement.common.util.ApiResponseBuilder;
@@ -58,7 +58,7 @@ public class UserController {
 	 * @return paginated user list
 	 */
 	@GetMapping
-	public ResponseEntity<ApiResponse<PageResponseDto<UserResponseDto>>> getUsers(@ModelAttribute UserSearchRequestDto request) {
+	public ResponseEntity<ApiResponse<PageResponseDto<UserResponseDto>>> getUsers(@ModelAttribute FilterRequest request) {
 		PageResponseDto<UserResponseDto> response = userService.getUsers(request);
 		return ResponseEntity.ok(ApiResponseBuilder.success(HttpStatus.OK.value(), MessageConstants.USERS_FETCHED, response));
 	}

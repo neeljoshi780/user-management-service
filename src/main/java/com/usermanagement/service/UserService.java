@@ -1,6 +1,6 @@
 package com.usermanagement.service;
 
-import com.usermanagement.common.request.UserSearchRequestDto;
+import com.usermanagement.common.request.FilterRequest;
 import com.usermanagement.common.response.PageResponseDto;
 import com.usermanagement.dto.request.CreateUserRequestDto;
 import com.usermanagement.dto.request.UpdateUserRequestDto;
@@ -34,7 +34,7 @@ public interface UserService {
 	 * @param request pagination, sorting, and search parameters
 	 * @return paginated user list
 	 */
-	PageResponseDto<UserResponseDto> getUsers(UserSearchRequestDto request);
+	PageResponseDto<UserResponseDto> getUsers(FilterRequest request);
 
 	/**
 	 * Updates an existing user.
